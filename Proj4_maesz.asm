@@ -39,6 +39,10 @@ INCLUDE Irvine32.inc
 
 ; (insert constant definitions here)
 
+; The upper and lower bounds of user input must be defined as constants
+LOWER_BOUND = 1
+UPPER_BOUND = 200
+
 .data
 
 ; (insert variable definitions here)
@@ -64,6 +68,9 @@ get_user_input_1 BYTE	"Enter the number of prime numbers would you like to print
 error_1 BYTE	"ERROR!",0
 error_2 BYTE	"You entered an invalid number. Please Try Again...",0
 ;	after this, display get_user_input_1 message again.
+
+; Data for entered user int
+user_input DWORD	?	; user inputted number n		
 
 .code
 main PROC

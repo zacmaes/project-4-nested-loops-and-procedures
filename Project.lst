@@ -1,16 +1,22 @@
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    06/20/22 13:06:16
-#Program Template     (template.asm			     Page 1 - 1
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
+"Project Four     (Proj4_maesz.asm			     Page 1 - 1
 
 
-				TITLE Program Template     (template.asm)
+				TITLE Project Four     (Proj4_maesz.asm)
 
-				; Author: 
-				; Last Modified:
-				; OSU email address: ONID_ID@oregonstate.edu
-				; Course number/section:   CS271 Section ???
-				; Project Number:                 Due Date:
-				; Description: This file is provided as a template from which you may work
-				;              when developing assembly projects in CS271.
+				; Author: Zachary Maes
+				; Last Modified: July 24, 2022
+				; OSU email address: maesz@oregonstate.edu
+				; Course number/section:   CS271 Section 400
+				; Project Number: 4            Due Date: July 24, 2022
+				; Description: 
+
+				; This program is divided into multiple procedures and sub-procedures. First the user is greeted and instructions are printed for them to read.
+				; The user will then enter a number in the range of [1...200] inclusive to which the program will validate that the value is within the range.
+				; The program validation will continue to ask the user for a new value if they previously entered a value out of bounds.
+				; After successful validation, the program will calculate that entered number of prime numbers in ascending order. 
+				; It will print these numbers with at least 3 spaces inbetween each number and 10 results per line.
+				; Upon successful printing of the prime numbers, the program will give a farewell message and end.
 
 				INCLUDE Irvine32.inc
 			      C ; Include file for Irvine32.lib             (Irvine32.inc)
@@ -35,25 +41,323 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    06/20/22 13:06:16
 
 				; (insert constant definitions here)
 
+				;UPPER AND LOWER BOUNDS
+ = 00000001			LOWER_BOUND = 1
+ = 000000C8			UPPER_BOUND = 200
+
  00000000			.data
 
 				; (insert variable definitions here)
+
+				; INTRODUCTION DATA
+ 00000000 57 65 6C 63 6F	intro_1		BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
+	   6D 65 20 74 6F
+	   20 50 72 6F 6A
+	   65 63 74 20 46
+	   6F 75 72 20 4E
+	   65 73 74 65 64
+	   20 4C 6F 6F 70
+	   73 20 26 20 50
+	   72 6F 63 65 64
+	   75 72 65 73 20
+	   62 79 20 5A 61
+	   63 68 61 72 79
+	   20 4D 61 65 73
+	   21 00
+
+ 00000043 44 69 72 65 63	direction_1 BYTE	"Directions:",0
+	   74 69 6F 6E 73
+	   3A 00
+ 0000004F 54 68 69 73 20	direction_2 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
+	   70 72 6F 67 72
+	   61 6D 20 63 61
+	   6C 63 75 6C 61
+	   74 65 73 20 61
+	   6E 64 20 64 69
+	   73 70 6C 61 79
+	   73 20 61 6C 6C
+	   20 6F 66 20 74
+	   68 65 20 70 72
+	   69 6D 65 20 6E
+	   75 6D 62 65 72
+	   73 20 75 70 20
+	   74 6F 20 61 6E
+	   64 20 69 6E 63
+	   6C 75 64 69 6E
+	   67 20 74 68 65
+	   20 6E 74 68 20
+	   70 72 69 6D 65
+	   2E 00
+ 000000B0 49 6E 20 61 20	direction_3 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
+	   6D 6F 6D 65 6E
+	   74 2C 20 74 68
+	   69 73 20 70 72
+	   6F 67 72 61 6D
+	   20 77 69 6C 6C
+	   20 68 61 76 65
+	   20 79 6F 75 20
+	   65 6E 74 65 72
+	   20 74 68 65 20
+	   6E 75 6D 62 65
+	   72 20 28 6E 29
+	   20 6F 66 20 70
+	   72 69 6D 65 20
+	   6E 75 6D 62 65
+	   72 73 20 74 6F
+	   20 62 65 20 64
+	   69 73 70 6C 61
+	   79 65 64 2E 00
+ 0000010F 54 68 65 20 6E	direction_4 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
+	   75 6D 62 65 72
+	   20 79 6F 75 20
+	   65 6E 74 65 72
+	   20 6D 75 73 74
+	   20 62 65 20 61
+	   6E 20 69 6E 74
+	   65 67 65 72 20
+	   69 6E 20 74 68
+	   65 20 72 61 6E
+	   67 65 20 6F 66
+	   20 5B 31 20 74
+	   6F 20 32 30 30
+	   5D 20 69 6E 63
+	   6C 75 73 69 76
+	   65 2E 20 00
+ 0000015E 49 66 20 79 6F	direction_5 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
+	   75 20 65 6E 74
+	   65 72 20 61 20
+	   77 72 6F 6E 67
+	   20 6E 75 6D 62
+	   65 72 2C 20 74
+	   68 65 20 70 72
+	   6F 67 72 61 6D
+	   20 77 69 6C 6C
+	   20 72 65 70 72
+	   6F 6D 70 74 20
+	   79 6F 75 20 74
+	   6F 20 65 6E 74
+	   65 72 20 61 6E
+	   6F 74 68 65 72
+	   20 6E 75 6D 62
+	   65 72 20 28 68
+	   6F 70 65 66 75
+	   6C 6C 79 20 63
+	   6F 72 72 65 63
+	   74 20 74 68 69
+	   73 20 74 69 6D
+	   65 20 61 72 6F
+	   75 6E 64 29 00
+ 000001D6 54 68 65 20 72	direction_6 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
+	   65 73 75 6C 74
+	   73 20 77 69 6C
+	   6C 20 62 65 20
+	   64 69 73 70 6C
+	   61 79 65 64 20
+	   31 30 20 70 72
+	   69 6D 65 20 6E
+	   75 6D 62 65 72
+	   73 20 70 65 72
+	   20 6C 69 6E 65
+	   2C 20 69 6E 20
+	   61 73 63 65 6E
+	   64 69 6E 67 20
+	   6F 72 64 65 72
+	   2C 20 77 69 74
+	   68 20 61 74 20
+	   6C 65 61 73 74
+	   20 33 20 73 70
+	   61 63 65 73 20
+	   62 65 74 77 65
+	   65 6E 20 74 68
+	   65 20 6E 75 6D
+	   62 65 72 73 2E
+	   20 00
+ 00000250 54 68 65 20 66	direction_7	BYTE	"The final row may contain fewer than 10 values.",0
+	   69 6E 61 6C 20
+	   72 6F 77 20 6D
+	   61 79 20 63 6F
+	   6E 74 61 69 6E
+	   20 66 65 77 65
+	   72 20 74 68 61
+	   6E 20 31 30 20
+	   76 61 6C 75 65
+	   73 2E 00
+
+				; GET USER INPUT DATA
+ 00000280 45 6E 74 65 72	get_user_input_1 BYTE	"Enter the number of prime numbers would you like to print [1 to 200]: ",0
+	   20 74 68 65 20
+	   6E 75 6D 62 65
+	   72 20 6F 66 20
+	   70 72 69 6D 65
+	   20 6E 75 6D 62
+	   65 72 73 20 77
+	   6F 75 6C 64 20
+	   79 6F 75 20 6C
+	   69 6B 65 20 74
+	   6F 20 70 72 69
+	   6E 74 20 5B 31
+	   20 74 6F 20 32
+	   30 30 5D 3A 20
+	   00
+
+ 000002C7 00000000		user_input		 DWORD	?	; Stores the user input
+
+
+				; VALIDATE USER INPUT DATA
+ 000002CB 45 52 52 4F 52	error_1 BYTE	"ERROR!",0
+	   21 00
+ 000002D2 59 6F 75 20 65	error_2 BYTE	"You entered an invalid number. Please Try Again...",0
+	   6E 74 65 72 65
+	   64 20 61 6E 20
+	   69 6E 76 61 6C
+	   69 64 20 6E 75
+	   6D 62 65 72 2E
+	   20 50 6C 65 61
+	   73 65 20 54 72
+	   79 20 41 67 61
+	   69 6E 2E 2E 2E
+	   00
+
+				; FAREWELL DATA
+ 00000305 57 4F 57 2E 2E	farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
+	   2E 20 4C 6F 6F
+	   6B 20 61 74 20
+	   74 68 6F 73 65
+	   20 70 72 69 6D
+	   65 20 6E 75 6D
+	   62 65 72 73 21
+	   20 48 61 76 65
+	   20 61 20 6E 69
+	   63 65 20 64 61
+	   79 21 00
+
+				; TEST DATA...DELETE--------------
+ 0000033A 67 65 74 55 73	test_gud BYTE	"getUserData",0
+	   65 72 44 61 74
+	   61 00
+ 00000346 76 61 6C 69 64	test_validate BYTE "validate",0
+	   61 74 65 00
+ 0000034F 73 68 6F 77 50	test_sp BYTE "showPrimes",0
+	   72 69 6D 65 73
+	   00
+ 0000035A 69 73 50 72 69	test_ip BYTE "isPrime",0
+	   6D 65 00
+				; --------------------------------
 
  00000000			.code
  00000000			main PROC
 
 				; (insert executable instructions here)
 
+ 00000000  E8 00000016			call introduction
+ 00000005  E8 00000094		    call getUserData
+						; call validate --- inside procedure definition below
+ 0000000A  E8 000000C3		    call showPrimes
+						; call isPrime --- inside procedure definition below 
+ 0000000F  E8 000000E3			call farewell
+
 					Invoke ExitProcess,0	; exit to operating system
- 00000000  6A 00	   *	    push   +000000000h
- 00000002  E8 00000000 E   *	    call   ExitProcess
- 00000007			main ENDP
+ 00000014  6A 00	   *	    push   +000000000h
+ 00000016  E8 00000000 E   *	    call   ExitProcess
+ 0000001B			main ENDP
 
 				; (insert additional procedures here)
 
+ 0000001B			introduction PROC
+ 0000001B  BA 00000000 R		mov EDX, OFFSET intro_1
+ 00000020  E8 00000000 E		call WriteString
+ 00000025  E8 00000000 E		call CrLf
+ 0000002A  E8 00000000 E		call CrLf
+
+ 0000002F  BA 00000043 R		mov EDX, OFFSET direction_1
+ 00000034  E8 00000000 E		call WriteString
+ 00000039  E8 00000000 E		call CrLf
+
+ 0000003E  BA 0000004F R		mov EDX, OFFSET direction_2
+ 00000043  E8 00000000 E		call WriteString
+ 00000048  E8 00000000 E		call CrLf
+					
+ 0000004D  BA 000000B0 R		mov EDX, OFFSET direction_3
+ 00000052  E8 00000000 E		call WriteString
+ 00000057  E8 00000000 E		call CrLf
+
+ 0000005C  BA 0000010F R		mov EDX, OFFSET direction_4
+ 00000061  E8 00000000 E		call WriteString
+ 00000066  E8 00000000 E		call CrLf
+
+ 0000006B  BA 0000015E R		mov EDX, OFFSET direction_5
+ 00000070  E8 00000000 E		call WriteString
+ 00000075  E8 00000000 E		call CrLf
+
+ 0000007A  BA 000001D6 R		mov EDX, OFFSET direction_6
+ 0000007F  E8 00000000 E		call WriteString
+ 00000084  E8 00000000 E		call CrLf
+
+ 00000089  BA 00000250 R		mov EDX, OFFSET direction_7
+ 0000008E  E8 00000000 E		call WriteString
+ 00000093  E8 00000000 E		call CrLf
+ 00000098  E8 00000000 E		call CrLf
+
+ 0000009D  C3				ret
+ 0000009E			introduction ENDP
+
+ 0000009E			getUserData PROC
+					
+ 0000009E  BA 00000280 R		mov EDX, OFFSET get_user_input_1
+ 000000A3  E8 00000000 E		call WriteString
+ 000000A8  E8 00000000 E		call CrLf
+
+ 000000AD  BA 0000033A R		mov EDX, OFFSET test_gud
+ 000000B2  E8 00000000 E		call WriteString
+ 000000B7  E8 00000000 E		call CrLf
+
+					; eventually call validate
+ 000000BC  E8 00000001			call validate
+
+
+ 000000C1  C3				ret
+ 000000C2			getUserData ENDP
+
+ 000000C2			validate PROC
+ 000000C2  BA 00000346 R		mov EDX, OFFSET test_validate
+ 000000C7  E8 00000000 E		call WriteString
+ 000000CC  E8 00000000 E		call CrLf
+
+ 000000D1  C3				ret
+ 000000D2			validate ENDP
+
+ 000000D2			showPrimes PROC
+					
+ 000000D2  BA 0000034F R		mov EDX, OFFSET test_sp
+ 000000D7  E8 00000000 E		call WriteString
+ 000000DC  E8 00000000 E		call CrLf
+
+					; eventually call isPrime
+ 000000E1  E8 00000001			call isPrime
+					
+ 000000E6  C3				ret
+ 000000E7			showPrimes ENDP
+
+ 000000E7			isPrime PROC
+					
+ 000000E7  BA 0000035A R		mov EDX, OFFSET test_ip
+ 000000EC  E8 00000000 E		call WriteString
+ 000000F1  E8 00000000 E		call CrLf
+
+ 000000F6  C3				ret
+ 000000F7			isPrime ENDP
+
+ 000000F7			farewell PROC
+ 000000F7  BA 00000305 R		mov EDX, OFFSET farewell_prompt
+ 000000FC  E8 00000000 E		call WriteString
+ 00000101  E8 00000000 E		call CrLf
+
+ 00000106  C3				ret
+ 00000107			farewell ENDP
+
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    06/20/22 13:06:16
-#Program Template     (template.asm			     Symbols 2 - 1
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
+"Project Four     (Proj4_maesz.asm			     Symbols 2 - 1
 
 
 
@@ -146,8 +450,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000007 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000362 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000107 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -254,9 +558,15 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000007 Public STDCALL
+farewell . . . . . . . . . . . .	P Near	 000000F7 _TEXT	Length= 00000010 Public STDCALL
+getUserData  . . . . . . . . . .	P Near	 0000009E _TEXT	Length= 00000024 Public STDCALL
+introduction . . . . . . . . . .	P Near	 0000001B _TEXT	Length= 00000083 Public STDCALL
+isPrime  . . . . . . . . . . . .	P Near	 000000E7 _TEXT	Length= 00000010 Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001B Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
+showPrimes . . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 00000015 Public STDCALL
+validate . . . . . . . . . . . .	P Near	 000000C2 _TEXT	Length= 00000010 Public STDCALL
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -346,6 +656,7 @@ KEY_EVENT  . . . . . . . . . . .	Number	 00000001h
 KEY_MASKS  . . . . . . . . . . .	Number	 0000001Fh   
 LEFT_ALT_PRESSED . . . . . . . .	Number	 00000002h   
 LEFT_CTRL_PRESSED  . . . . . . .	Number	 00000008h   
+LOWER_BOUND  . . . . . . . . . .	Number	 00000001h   
 MB_ABORTRETRYIGNORE  . . . . . .	Number	 00000002h   
 MB_APPLMODAL . . . . . . . . . .	Number	 00000000h   
 MB_CANCELTRYCONTINUE . . . . . .	Number	 00000006h   
@@ -392,6 +703,7 @@ SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
+UPPER_BOUND  . . . . . . . . . .	Number	 000000C8h   
 VK_11  . . . . . . . . . . . . .	Number	 000000BDh   
 VK_12  . . . . . . . . . . . . .	Number	 000000BBh   
 VK_ADD . . . . . . . . . . . . .	Number	 0000006Bh   
@@ -477,9 +789,21 @@ black  . . . . . . . . . . . . .	Number	 00000000h
 blue . . . . . . . . . . . . . .	Number	 00000001h   
 brown  . . . . . . . . . . . . .	Number	 00000006h   
 cyan . . . . . . . . . . . . . .	Number	 00000003h   
+direction_1  . . . . . . . . . .	Byte	 00000043 _DATA	
+direction_2  . . . . . . . . . .	Byte	 0000004F _DATA	
+direction_3  . . . . . . . . . .	Byte	 000000B0 _DATA	
+direction_4  . . . . . . . . . .	Byte	 0000010F _DATA	
+direction_5  . . . . . . . . . .	Byte	 0000015E _DATA	
+direction_6  . . . . . . . . . .	Byte	 000001D6 _DATA	
+direction_7  . . . . . . . . . .	Byte	 00000250 _DATA	
+error_1  . . . . . . . . . . . .	Byte	 000002CB _DATA	
+error_2  . . . . . . . . . . . .	Byte	 000002D2 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
+farewell_prompt  . . . . . . . .	Byte	 00000305 _DATA	
+get_user_input_1 . . . . . . . .	Byte	 00000280 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
+intro_1  . . . . . . . . . . . .	Byte	 00000000 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -488,6 +812,11 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
+test_gud . . . . . . . . . . . .	Byte	 0000033A _DATA	
+test_ip  . . . . . . . . . . . .	Byte	 0000035A _DATA	
+test_sp  . . . . . . . . . . . .	Byte	 0000034F _DATA	
+test_validate  . . . . . . . . .	Byte	 00000346 _DATA	
+user_input . . . . . . . . . . .	DWord	 000002C7 _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

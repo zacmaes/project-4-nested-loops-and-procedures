@@ -1,37 +1,18 @@
-﻿TITLE Project Four Nested Loops & Procedures     (Proj4_maesz.asm)
+TITLE Project Four     (Proj4_maesz.asm)
 
 ; Author: Zachary Maes
-; Last Modified: July 23, 2022
+; Last Modified: July 24, 2022
 ; OSU email address: maesz@oregonstate.edu
 ; Course number/section:   CS271 Section 400
-; Project Number: 4                Due Date: July 24, 2022
+; Project Number: 4            Due Date: July 24, 2022
 ; Description: 
-;
-; Write a program to calculate prime numbers. 
-; First, the user is instructed to enter the number of primes to be displayed, and is prompted to enter an integer in the range [1 ... 200]. 
-; The user enters a number, n, and the program verifies that 1 ≤ n ≤ 200. If n is out of range, the user is re-prompted until they enter a value in the specified range. 
-; The program then calculates and displays the all of the prime numbers up to and including the nth prime. 
-; The results must be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. 
-; The final row may contain fewer than 10 values.
 
-; REQUIREMENTS:
-; 1. The programmer’s name and program title must appear in the output.
-; 2. The counting loop (1 to n) must be implemented using the LOOP instruction.
-; 3. The main procedure must consist of only procedure calls (with any necessary framing). It should be a readable "list" of what the program will do.
-; 4. Each procedure will implement a section of the program logic, i.e., each procedure will specify how the logic of its section is implemented. 
-;	The program must be modularized into at least the following procedures and sub-procedures:
-;     - introduction
-;     - getUserData - Obtain user input
-;			+ validate - Validate user input n is in specified bounds
-;     - showPrimes - display n prime numbers; utilize counting loop and the LOOP instruction to keep track of the number primes displayed; 
-;        candidate primes are generated within counting loop and are passed to isPrime for evaluation
-;			+ isPrime - receive candidate value, return boolean (0 or 1) indicating whether candidate value is prime (1) or not prime (0)
-;     - farewell
-; 5. The upper and lower bounds of user input must be defined as constants.
-; 6. The USES directive is not allowed on this project.
-; 7. If the user enters a number outside the range [1 ... 200] an error message must be displayed and the user must be prompted to re-enter the number of primes to be shown.
-; 8. The program must be fully documented and laid out according to the CS271 Style Guide. 
-;	This includes a complete header block for identification, description, etc., a comment outline to explain each section of code, and proper procedure headers/documentation.
+; This program is divided into multiple procedures and sub-procedures. First the user is greeted and instructions are printed for them to read.
+; The user will then enter a number in the range of [1...200] inclusive to which the program will validate that the value is within the range.
+; The program validation will continue to ask the user for a new value if they previously entered a value out of bounds.
+; After successful validation, the program will calculate that entered number of prime numbers in ascending order. 
+; It will print these numbers with at least 3 spaces inbetween each number and 10 results per line.
+; Upon successful printing of the prime numbers, the program will give a farewell message and end.
 
 INCLUDE Irvine32.inc
 
@@ -39,7 +20,7 @@ INCLUDE Irvine32.inc
 
 ; (insert constant definitions here)
 
-; The upper and lower bounds of user input must be defined as constants
+;UPPER AND LOWER BOUNDS
 LOWER_BOUND = 1
 UPPER_BOUND = 200
 
@@ -47,30 +28,36 @@ UPPER_BOUND = 200
 
 ; (insert variable definitions here)
 
-; Introduction Data
-; 1. The programmer’s name and program title must appear in the output.
-intro_1 BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
+; INTRODUCTION DATA
+intro_1		BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
 
-; Directions Data
-direction_1 BYTE	"Directions: ",0
+direction_1 BYTE	"Directions:",0
 direction_2 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
 direction_3 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
 direction_4 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
 direction_5 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
 direction_6 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
-direction_7 BYTE	"The final row may contain fewer than 10 values.",0
+direction_7	BYTE	"The final row may contain fewer than 10 values.",0
 
-; GET USER DATA MESSAGE
+; GET USER INPUT DATA
 get_user_input_1 BYTE	"Enter the number of prime numbers would you like to print [1 to 200]: ",0
 
-; 7. If the user enters a number outside the range [1 ... 200] an error message must be displayed and the user must be prompted to re-enter the number of primes to be shown.
-; USER INPUT ERROR MESSAGE
+user_input		 DWORD	?	; Stores the user input
+
+
+; VALIDATE USER INPUT DATA
 error_1 BYTE	"ERROR!",0
 error_2 BYTE	"You entered an invalid number. Please Try Again...",0
-;	after this, display get_user_input_1 message again.
 
-; Data for entered user int
-user_input DWORD	?	; user inputted number n		
+; FAREWELL DATA
+farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
+
+; TEST DATA...DELETE--------------
+test_gud BYTE	"getUserData",0
+test_validate BYTE "validate",0
+test_sp BYTE "showPrimes",0
+test_ip BYTE "isPrime",0
+; --------------------------------
 
 .code
 main PROC
@@ -79,9 +66,9 @@ main PROC
 
 	call introduction
     call getUserData
-		; call validate??? ---  where do I do it?
+		; call validate --- inside procedure definition below
     call showPrimes
-		; isPrime??? --- where?
+		; call isPrime --- inside procedure definition below 
 	call farewell
 
 	Invoke ExitProcess,0	; exit to operating system
@@ -90,20 +77,95 @@ main ENDP
 ; (insert additional procedures here)
 
 introduction PROC
+	mov EDX, OFFSET intro_1
+	call WriteString
+	call CrLf
+	call CrLf
 
+	mov EDX, OFFSET direction_1
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET direction_2
+	call WriteString
+	call CrLf
+	
+	mov EDX, OFFSET direction_3
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET direction_4
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET direction_5
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET direction_6
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET direction_7
+	call WriteString
+	call CrLf
+	call CrLf
 
 	ret
 introduction ENDP
 
 getUserData PROC
 	
-	; call validate??? ---  where do I do it?
+	mov EDX, OFFSET get_user_input_1
+	call WriteString
+	call CrLf
+
+	mov EDX, OFFSET test_gud
+	call WriteString
+	call CrLf
+
+	; eventually call validate
 	call validate
 
 
 	ret
 getUserData ENDP
 
+validate PROC
+	mov EDX, OFFSET test_validate
+	call WriteString
+	call CrLf
 
+	ret
+validate ENDP
+
+showPrimes PROC
+	
+	mov EDX, OFFSET test_sp
+	call WriteString
+	call CrLf
+
+	; eventually call isPrime
+	call isPrime
+	
+	ret
+showPrimes ENDP
+
+isPrime PROC
+	
+	mov EDX, OFFSET test_ip
+	call WriteString
+	call CrLf
+
+	ret
+isPrime ENDP
+
+farewell PROC
+	mov EDX, OFFSET farewell_prompt
+	call WriteString
+	call CrLf
+
+	ret
+farewell ENDP
 
 END main

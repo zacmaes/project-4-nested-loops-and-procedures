@@ -15,9 +15,7 @@ TITLE Project Four     (Proj4_maesz.asm)
 ; Upon successful printing of the prime numbers, the program will give a farewell message and end.
 
 INCLUDE Irvine32.inc
-
 ; (insert macro definitions here)
-
 ; (insert constant definitions here)
 
 ;UPPER AND LOWER BOUNDS
@@ -25,46 +23,35 @@ LOWER_BOUND = 1
 UPPER_BOUND = 200
 
 .data
-
 ; (insert variable definitions here)
 
 ; INTRODUCTION DATA
-intro_1		BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
-
-direction_1 BYTE	"Directions:",0
-direction_2 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
-direction_3 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
-direction_4 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
-direction_5 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
-direction_6 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
-direction_7	BYTE	"The final row may contain fewer than 10 values.",0
+intro_1			 BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
+direction_1		 BYTE	"Directions:",0
+direction_2		 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
+direction_3		 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
+direction_4		 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
+direction_5		 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
+direction_6		 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
+direction_7		 BYTE	"The final row may contain fewer than 10 values.",0
 
 ; GET USER INPUT DATA
 get_user_input_1 BYTE	"Enter the number of prime numbers would you like to print [1 to 200]: ",0
-
-user_input_check		 DWORD	?	; 0 =  not the correct value --- 1 = correct value
-user_input		 DWORD	?	; Stores the user input
+user_input_check DWORD	?		; 0 =  not the correct value --- 1 = correct value
+user_input		 DWORD	?		; Stores the user input
 
 
 ; VALIDATE USER INPUT DATA
-error_1 BYTE	"ERROR!",0
-error_2 BYTE	"You entered an invalid number. Please Try Again...",0
+error_1			 BYTE	"ERROR!",0
+error_2			 BYTE	"You entered an invalid number. Please Try Again...",0
 is_valid_message BYTE	"Your Number is valid!",0
 
 ; Prime Loop DATA
-prime_bool	DWORD ?	; 0 =  not prime --- 1 = prime
-prime_spaces BYTE "   ",0	; 3 spaces
+prime_bool		 DWORD	?		; 0 =  not prime --- 1 = prime
+prime_spaces	 BYTE	"   ",0	; 3 spaces
 
 ; FAREWELL DATA
-farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
-
-; TEST DATA...DELETE--------------
-test_gud BYTE	"getUserData",0
-test_backtogud BYTE "BACK TO getUserData after call validate!",0
-test_validate BYTE "validate",0
-test_sp BYTE "showPrimes",0
-test_ip BYTE "isPrime",0
-; --------------------------------
+farewell_prompt  BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 
 .code
 main PROC

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 17:59:22
 "Project Four     (Proj4_maesz.asm			     Page 1 - 1
 
 
@@ -200,13 +200,14 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
 	   30 30 5D 3A 20
 	   00
 
- 000002C7 00000000		user_input		 DWORD	?	; Stores the user input
+ 000002C7 00000000		user_input_check		 DWORD	?	; 0 =  not the correct value --- 1 = correct value
+ 000002CB 00000000		user_input		 DWORD	?	; Stores the user input
 
 
 				; VALIDATE USER INPUT DATA
- 000002CB 45 52 52 4F 52	error_1 BYTE	"ERROR!",0
+ 000002CF 45 52 52 4F 52	error_1 BYTE	"ERROR!",0
 	   21 00
- 000002D2 59 6F 75 20 65	error_2 BYTE	"You entered an invalid number. Please Try Again...",0
+ 000002D6 59 6F 75 20 65	error_2 BYTE	"You entered an invalid number. Please Try Again...",0
 	   6E 74 65 72 65
 	   64 20 61 6E 20
 	   69 6E 76 61 6C
@@ -217,9 +218,14 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
 	   79 20 41 67 61
 	   69 6E 2E 2E 2E
 	   00
+ 00000309 59 6F 75 72 20	is_valid_message BYTE	"Your Number is valid!",0
+	   4E 75 6D 62 65
+	   72 20 69 73 20
+	   76 61 6C 69 64
+	   21 00
 
 				; FAREWELL DATA
- 00000305 57 4F 57 2E 2E	farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
+ 0000031F 57 4F 57 2E 2E	farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 	   2E 20 4C 6F 6F
 	   6B 20 61 74 20
 	   74 68 6F 73 65
@@ -232,15 +238,24 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
 	   79 21 00
 
 				; TEST DATA...DELETE--------------
- 0000033A 67 65 74 55 73	test_gud BYTE	"getUserData",0
+ 00000354 67 65 74 55 73	test_gud BYTE	"getUserData",0
 	   65 72 44 61 74
 	   61 00
- 00000346 76 61 6C 69 64	test_validate BYTE "validate",0
+ 00000360 42 41 43 4B 20	test_backtogud BYTE "BACK TO getUserData after call validate!",0
+	   54 4F 20 67 65
+	   74 55 73 65 72
+	   44 61 74 61 20
+	   61 66 74 65 72
+	   20 63 61 6C 6C
+	   20 76 61 6C 69
+	   64 61 74 65 21
+	   00
+ 00000389 76 61 6C 69 64	test_validate BYTE "validate",0
 	   61 74 65 00
- 0000034F 73 68 6F 77 50	test_sp BYTE "showPrimes",0
+ 00000392 73 68 6F 77 50	test_sp BYTE "showPrimes",0
 	   72 69 6D 65 73
 	   00
- 0000035A 69 73 50 72 69	test_ip BYTE "isPrime",0
+ 0000039D 69 73 50 72 69	test_ip BYTE "isPrime",0
 	   6D 65 00
 				; --------------------------------
 
@@ -252,9 +267,9 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
  00000000  E8 00000016			call introduction
  00000005  E8 00000094		    call getUserData
 						; call validate --- inside procedure definition below
- 0000000A  E8 000000C3		    call showPrimes
+ 0000000A  E8 00000132		    call showPrimes
 						; call isPrime --- inside procedure definition below 
- 0000000F  E8 000000E3			call farewell
+ 0000000F  E8 00000152			call farewell
 
 					Invoke ExitProcess,0	; exit to operating system
  00000014  6A 00	   *	    push   +000000000h
@@ -303,60 +318,114 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
 
  0000009E			getUserData PROC
 					
- 0000009E  BA 00000280 R		mov EDX, OFFSET get_user_input_1
- 000000A3  E8 00000000 E		call WriteString
- 000000A8  E8 00000000 E		call CrLf
-
- 000000AD  BA 0000033A R		mov EDX, OFFSET test_gud
- 000000B2  E8 00000000 E		call WriteString
- 000000B7  E8 00000000 E		call CrLf
+ 0000009E  C7 05 000002C7 R		mov user_input_check, 0 ; 0 = not valid number..initialize to this
+	   00000000
+					; Prompt the user for an integer
+ 000000A8				_promptUser:
+ 000000A8  BA 00000280 R			mov EDX, OFFSET get_user_input_1
+ 000000AD  E8 00000000 E			call WriteString
+ 000000B2  E8 00000000 E			call ReadInt
+						; EAX now has the user input
+						
 
 					; eventually call validate
- 000000BC  E8 00000001			call validate
-
-
- 000000C1  C3				ret
- 000000C2			getUserData ENDP
-
- 000000C2			validate PROC
- 000000C2  BA 00000346 R		mov EDX, OFFSET test_validate
- 000000C7  E8 00000000 E		call WriteString
- 000000CC  E8 00000000 E		call CrLf
-
- 000000D1  C3				ret
- 000000D2			validate ENDP
-
- 000000D2			showPrimes PROC
 					
- 000000D2  BA 0000034F R		mov EDX, OFFSET test_sp
- 000000D7  E8 00000000 E		call WriteString
- 000000DC  E8 00000000 E		call CrLf
+ 000000B7  E8 0000002D			call validate
+
+					; TEST --- DELETE
+ 000000BC  BA 00000360 R		mov EDX, OFFSET test_backtogud
+ 000000C1  E8 00000000 E		call WriteString
+ 000000C6  E8 00000000 E		call CrLf
+					; ----------------------------
+					; check user_input_check and decided where to jump
+ 000000CB  83 3D 000002C7 R		cmp user_input_check, 1
+	   01
+ 000000D2  75 D4			JNE	_promptUser
+
+
+ 000000D4  A3 000002CB R		mov user_input, EAX ; save eax in user_input
+
+ 000000D9  A1 000002CB R		mov EAX, user_input ; write user_input
+ 000000DE  E8 00000000 E		call WriteInt
+ 000000E3  E8 00000000 E		call CrLf
+
+					
+
+ 000000E8  C3				ret
+ 000000E9			getUserData ENDP
+
+ 000000E9			validate PROC
+					;TEST---DELETE----------
+ 000000E9  BA 00000389 R		mov EDX, OFFSET test_validate 
+ 000000EE  E8 00000000 E		call WriteString
+ 000000F3  E8 00000000 E		call CrLf
+					; -----------------------------
+
+ 000000F8  3D 000000C8			cmp EAX, UPPER_BOUND
+ 000000FD  7F 02			JG  _notInRange
+ 000000FF  7E 1F			JLE _lessThanOrEqualToUpper
+
+
+ 00000101				_notInRange:
+						; Error Too High
+ 00000101  BA 000002CF R			mov EDX, OFFSET error_1 ; Error Message 1
+ 00000106  E8 00000000 E			call WriteString
+ 0000010B  E8 00000000 E			call CrLf
+						
+ 00000110  BA 000002D6 R			mov EDX, OFFSET error_2 ; Error Message 2
+ 00000115  E8 00000000 E			call WriteString
+ 0000011A  E8 00000000 E			call CrLf
+ 0000011F  C3					ret
+
+
+
+ 00000120				_lessThanOrEqualToUpper:
+ 00000120  83 F8 01				cmp EAX, LOWER_BOUND
+ 00000123  7D 02				JGE _validNumber
+ 00000125  7C DA				JL  _notInRange
+
+ 00000127				_validNumber:
+						; display success message
+ 00000127  BA 00000309 R			mov EDX, OFFSET is_valid_message
+ 0000012C  E8 00000000 E			call WriteString
+ 00000131  E8 00000000 E			call CrLf
+ 00000136  C7 05 000002C7 R			mov user_input_check, 1	; 1 = valid number
+	   00000001
+
+ 00000140  C3				ret
+ 00000141			validate ENDP
+
+ 00000141			showPrimes PROC
+					
+ 00000141  BA 00000392 R		mov EDX, OFFSET test_sp
+ 00000146  E8 00000000 E		call WriteString
+ 0000014B  E8 00000000 E		call CrLf
 
 					; eventually call isPrime
- 000000E1  E8 00000001			call isPrime
+ 00000150  E8 00000001			call isPrime
 					
- 000000E6  C3				ret
- 000000E7			showPrimes ENDP
+ 00000155  C3				ret
+ 00000156			showPrimes ENDP
 
- 000000E7			isPrime PROC
+ 00000156			isPrime PROC
 					
- 000000E7  BA 0000035A R		mov EDX, OFFSET test_ip
- 000000EC  E8 00000000 E		call WriteString
- 000000F1  E8 00000000 E		call CrLf
+ 00000156  BA 0000039D R		mov EDX, OFFSET test_ip
+ 0000015B  E8 00000000 E		call WriteString
+ 00000160  E8 00000000 E		call CrLf
 
- 000000F6  C3				ret
- 000000F7			isPrime ENDP
+ 00000165  C3				ret
+ 00000166			isPrime ENDP
 
- 000000F7			farewell PROC
- 000000F7  BA 00000305 R		mov EDX, OFFSET farewell_prompt
- 000000FC  E8 00000000 E		call WriteString
- 00000101  E8 00000000 E		call CrLf
+ 00000166			farewell PROC
+ 00000166  BA 0000031F R		mov EDX, OFFSET farewell_prompt
+ 0000016B  E8 00000000 E		call WriteString
+ 00000170  E8 00000000 E		call CrLf
 
- 00000106  C3				ret
- 00000107			farewell ENDP
+ 00000175  C3				ret
+ 00000176			farewell ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 16:22:56
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 17:59:22
 "Project Four     (Proj4_maesz.asm			     Symbols 2 - 1
 
 
@@ -450,8 +519,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000362 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 00000107 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 000003A5 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000176 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -558,15 +627,19 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-farewell . . . . . . . . . . . .	P Near	 000000F7 _TEXT	Length= 00000010 Public STDCALL
-getUserData  . . . . . . . . . .	P Near	 0000009E _TEXT	Length= 00000024 Public STDCALL
+farewell . . . . . . . . . . . .	P Near	 00000166 _TEXT	Length= 00000010 Public STDCALL
+getUserData  . . . . . . . . . .	P Near	 0000009E _TEXT	Length= 0000004B Public STDCALL
+  _promptUser  . . . . . . . . .	L Near	 000000A8 _TEXT	
 introduction . . . . . . . . . .	P Near	 0000001B _TEXT	Length= 00000083 Public STDCALL
-isPrime  . . . . . . . . . . . .	P Near	 000000E7 _TEXT	Length= 00000010 Public STDCALL
+isPrime  . . . . . . . . . . . .	P Near	 00000156 _TEXT	Length= 00000010 Public STDCALL
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001B Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showPrimes . . . . . . . . . . .	P Near	 000000D2 _TEXT	Length= 00000015 Public STDCALL
-validate . . . . . . . . . . . .	P Near	 000000C2 _TEXT	Length= 00000010 Public STDCALL
+showPrimes . . . . . . . . . . .	P Near	 00000141 _TEXT	Length= 00000015 Public STDCALL
+validate . . . . . . . . . . . .	P Near	 000000E9 _TEXT	Length= 00000058 Public STDCALL
+  _notInRange  . . . . . . . . .	L Near	 00000101 _TEXT	
+  _lessThanOrEqualToUpper  . . .	L Near	 00000120 _TEXT	
+  _validNumber . . . . . . . . .	L Near	 00000127 _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -796,14 +869,15 @@ direction_4  . . . . . . . . . .	Byte	 0000010F _DATA
 direction_5  . . . . . . . . . .	Byte	 0000015E _DATA	
 direction_6  . . . . . . . . . .	Byte	 000001D6 _DATA	
 direction_7  . . . . . . . . . .	Byte	 00000250 _DATA	
-error_1  . . . . . . . . . . . .	Byte	 000002CB _DATA	
-error_2  . . . . . . . . . . . .	Byte	 000002D2 _DATA	
+error_1  . . . . . . . . . . . .	Byte	 000002CF _DATA	
+error_2  . . . . . . . . . . . .	Byte	 000002D6 _DATA	
 exit . . . . . . . . . . . . . .	Text   	 INVOKE ExitProcess,0
-farewell_prompt  . . . . . . . .	Byte	 00000305 _DATA	
+farewell_prompt  . . . . . . . .	Byte	 0000031F _DATA	
 get_user_input_1 . . . . . . . .	Byte	 00000280 _DATA	
 gray . . . . . . . . . . . . . .	Number	 00000008h   
 green  . . . . . . . . . . . . .	Number	 00000002h   
 intro_1  . . . . . . . . . . . .	Byte	 00000000 _DATA	
+is_valid_message . . . . . . . .	Byte	 00000309 _DATA	
 lightBlue  . . . . . . . . . . .	Number	 00000009h   
 lightCyan  . . . . . . . . . . .	Number	 0000000Bh   
 lightGray  . . . . . . . . . . .	Number	 00000007h   
@@ -812,11 +886,13 @@ lightMagenta . . . . . . . . . .	Number	 0000000Dh
 lightRed . . . . . . . . . . . .	Number	 0000000Ch   
 magenta  . . . . . . . . . . . .	Number	 00000005h   
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-test_gud . . . . . . . . . . . .	Byte	 0000033A _DATA	
-test_ip  . . . . . . . . . . . .	Byte	 0000035A _DATA	
-test_sp  . . . . . . . . . . . .	Byte	 0000034F _DATA	
-test_validate  . . . . . . . . .	Byte	 00000346 _DATA	
-user_input . . . . . . . . . . .	DWord	 000002C7 _DATA	
+test_backtogud . . . . . . . . .	Byte	 00000360 _DATA	
+test_gud . . . . . . . . . . . .	Byte	 00000354 _DATA	
+test_ip  . . . . . . . . . . . .	Byte	 0000039D _DATA	
+test_sp  . . . . . . . . . . . .	Byte	 00000392 _DATA	
+test_validate  . . . . . . . . .	Byte	 00000389 _DATA	
+user_input_check . . . . . . . .	DWord	 000002C7 _DATA	
+user_input . . . . . . . . . . .	DWord	 000002CB _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   

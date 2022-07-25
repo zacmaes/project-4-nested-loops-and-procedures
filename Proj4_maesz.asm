@@ -42,18 +42,21 @@ direction_7	BYTE	"The final row may contain fewer than 10 values.",0
 ; GET USER INPUT DATA
 get_user_input_1 BYTE	"Enter the number of prime numbers would you like to print [1 to 200]: ",0
 
+user_input_check		 DWORD	?	; 0 =  not the correct value --- 1 = correct value
 user_input		 DWORD	?	; Stores the user input
 
 
 ; VALIDATE USER INPUT DATA
 error_1 BYTE	"ERROR!",0
 error_2 BYTE	"You entered an invalid number. Please Try Again...",0
+is_valid_message BYTE	"Your Number is valid!",0
 
 ; FAREWELL DATA
 farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 
 ; TEST DATA...DELETE--------------
 test_gud BYTE	"getUserData",0
+test_backtogud BYTE "BACK TO getUserData after call validate!",0
 test_validate BYTE "validate",0
 test_sp BYTE "showPrimes",0
 test_ip BYTE "isPrime",0
@@ -116,25 +119,76 @@ introduction ENDP
 
 getUserData PROC
 	
-	mov EDX, OFFSET get_user_input_1
-	call WriteString
-	call CrLf
-
-	mov EDX, OFFSET test_gud
-	call WriteString
-	call CrLf
+	mov user_input_check, 0 ; 0 = not valid number..initialize to this
+	; Prompt the user for an integer
+	_promptUser:
+		mov EDX, OFFSET get_user_input_1
+		call WriteString
+		call ReadInt
+		; EAX now has the user input
+		
 
 	; eventually call validate
+	
 	call validate
 
+	; TEST --- DELETE
+	mov EDX, OFFSET test_backtogud
+	call WriteString
+	call CrLf
+	; ----------------------------
+	; check user_input_check and decided where to jump
+	cmp user_input_check, 1
+	JNE	_promptUser
+
+
+	mov user_input, EAX ; save eax in user_input
+
+	mov EAX, user_input ; write user_input
+	call WriteInt
+	call CrLf
+
+	
 
 	ret
 getUserData ENDP
 
 validate PROC
-	mov EDX, OFFSET test_validate
+	;TEST---DELETE----------
+	mov EDX, OFFSET test_validate 
 	call WriteString
 	call CrLf
+	; -----------------------------
+
+	cmp EAX, UPPER_BOUND
+	JG  _notInRange
+	JLE _lessThanOrEqualToUpper
+
+
+	_notInRange:
+		; Error Too High
+		mov EDX, OFFSET error_1 ; Error Message 1
+		call WriteString
+		call CrLf
+		
+		mov EDX, OFFSET error_2 ; Error Message 2
+		call WriteString
+		call CrLf
+		ret
+
+
+
+	_lessThanOrEqualToUpper:
+		cmp EAX, LOWER_BOUND
+		JGE _validNumber
+		JL  _notInRange
+
+	_validNumber:
+		; display success message
+		mov EDX, OFFSET is_valid_message
+		call WriteString
+		call CrLf
+		mov user_input_check, 1	; 1 = valid number
 
 	ret
 validate ENDP

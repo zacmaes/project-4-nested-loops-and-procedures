@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 23:14:19
 "Project Four     (Proj4_maesz.asm			     Page 1 - 1
 
 
@@ -36,9 +36,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 			      C .NOLIST
 			      C .LIST
 			      C 
-
 				; (insert macro definitions here)
-
 				; (insert constant definitions here)
 
 				;UPPER AND LOWER BOUNDS
@@ -46,11 +44,10 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
  = 000000C8			UPPER_BOUND = 200
 
  00000000			.data
-
 				; (insert variable definitions here)
 
 				; INTRODUCTION DATA
- 00000000 57 65 6C 63 6F	intro_1		BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
+ 00000000 57 65 6C 63 6F	intro_1			 BYTE	"Welcome to Project Four Nested Loops & Procedures by Zachary Maes!",0
 	   6D 65 20 74 6F
 	   20 50 72 6F 6A
 	   65 63 74 20 46
@@ -64,11 +61,10 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   63 68 61 72 79
 	   20 4D 61 65 73
 	   21 00
-
- 00000043 44 69 72 65 63	direction_1 BYTE	"Directions:",0
+ 00000043 44 69 72 65 63	direction_1		 BYTE	"Directions:",0
 	   74 69 6F 6E 73
 	   3A 00
- 0000004F 54 68 69 73 20	direction_2 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
+ 0000004F 54 68 69 73 20	direction_2		 BYTE	"This program calculates and displays all of the prime numbers up to and including the nth prime.",0
 	   70 72 6F 67 72
 	   61 6D 20 63 61
 	   6C 63 75 6C 61
@@ -88,7 +84,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   20 6E 74 68 20
 	   70 72 69 6D 65
 	   2E 00
- 000000B0 49 6E 20 61 20	direction_3 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
+ 000000B0 49 6E 20 61 20	direction_3		 BYTE	"In a moment, this program will have you enter the number (n) of prime numbers to be displayed.",0
 	   6D 6F 6D 65 6E
 	   74 2C 20 74 68
 	   69 73 20 70 72
@@ -107,7 +103,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   20 62 65 20 64
 	   69 73 70 6C 61
 	   79 65 64 2E 00
- 0000010F 54 68 65 20 6E	direction_4 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
+ 0000010F 54 68 65 20 6E	direction_4		 BYTE	"The number you enter must be an integer in the range of [1 to 200] inclusive. ",0
 	   75 6D 62 65 72
 	   20 79 6F 75 20
 	   65 6E 74 65 72
@@ -123,7 +119,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   5D 20 69 6E 63
 	   6C 75 73 69 76
 	   65 2E 20 00
- 0000015E 49 66 20 79 6F	direction_5 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
+ 0000015E 49 66 20 79 6F	direction_5		 BYTE	"If you enter a wrong number, the program will reprompt you to enter another number (hopefully correct this time around)",0
 	   75 20 65 6E 74
 	   65 72 20 61 20
 	   77 72 6F 6E 67
@@ -147,7 +143,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   73 20 74 69 6D
 	   65 20 61 72 6F
 	   75 6E 64 29 00
- 000001D6 54 68 65 20 72	direction_6 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
+ 000001D6 54 68 65 20 72	direction_6		 BYTE	"The results will be displayed 10 prime numbers per line, in ascending order, with at least 3 spaces between the numbers. ",0
 	   65 73 75 6C 74
 	   73 20 77 69 6C
 	   6C 20 62 65 20
@@ -172,7 +168,7 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   65 20 6E 75 6D
 	   62 65 72 73 2E
 	   20 00
- 00000250 54 68 65 20 66	direction_7	BYTE	"The final row may contain fewer than 10 values.",0
+ 00000250 54 68 65 20 66	direction_7		 BYTE	"The final row may contain fewer than 10 values.",0
 	   69 6E 61 6C 20
 	   72 6F 77 20 6D
 	   61 79 20 63 6F
@@ -199,15 +195,14 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   20 74 6F 20 32
 	   30 30 5D 3A 20
 	   00
-
- 000002C7 00000000		user_input_check		 DWORD	?	; 0 =  not the correct value --- 1 = correct value
- 000002CB 00000000		user_input		 DWORD	?	; Stores the user input
+ 000002C7 00000000		user_input_check DWORD	?		; 0 =  not the correct value --- 1 = correct value
+ 000002CB 00000000		user_input		 DWORD	?		; Stores the user input
 
 
 				; VALIDATE USER INPUT DATA
- 000002CF 45 52 52 4F 52	error_1 BYTE	"ERROR!",0
+ 000002CF 45 52 52 4F 52	error_1			 BYTE	"ERROR!",0
 	   21 00
- 000002D6 59 6F 75 20 65	error_2 BYTE	"You entered an invalid number. Please Try Again...",0
+ 000002D6 59 6F 75 20 65	error_2			 BYTE	"You entered an invalid number. Please Try Again...",0
 	   6E 74 65 72 65
 	   64 20 61 6E 20
 	   69 6E 76 61 6C
@@ -225,11 +220,11 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   21 00
 
 				; Prime Loop DATA
- 0000031F 00000000		prime_bool	DWORD ?	; 0 =  not prime --- 1 = prime
- 00000323 20 20 20 00		prime_spaces BYTE "   ",0	; 3 spaces
+ 0000031F 00000000		prime_bool		 DWORD	?		; 0 =  not prime --- 1 = prime
+ 00000323 20 20 20 00		prime_spaces	 BYTE	"   ",0	; 3 spaces
 
 				; FAREWELL DATA
- 00000327 57 4F 57 2E 2E	farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
+ 00000327 57 4F 57 2E 2E	farewell_prompt  BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 	   2E 20 4C 6F 6F
 	   6B 20 61 74 20
 	   74 68 6F 73 65
@@ -241,39 +236,14 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 	   63 65 20 64 61
 	   79 21 00
 
-				; TEST DATA...DELETE--------------
- 0000035C 67 65 74 55 73	test_gud BYTE	"getUserData",0
-	   65 72 44 61 74
-	   61 00
- 00000368 42 41 43 4B 20	test_backtogud BYTE "BACK TO getUserData after call validate!",0
-	   54 4F 20 67 65
-	   74 55 73 65 72
-	   44 61 74 61 20
-	   61 66 74 65 72
-	   20 63 61 6C 6C
-	   20 76 61 6C 69
-	   64 61 74 65 21
-	   00
- 00000391 76 61 6C 69 64	test_validate BYTE "validate",0
-	   61 74 65 00
- 0000039A 73 68 6F 77 50	test_sp BYTE "showPrimes",0
-	   72 69 6D 65 73
-	   00
- 000003A5 69 73 50 72 69	test_ip BYTE "isPrime",0
-	   6D 65 00
-				; --------------------------------
-
  00000000			.code
  00000000			main PROC
+					; (insert executable instructions here)
 
-				; (insert executable instructions here)
-
- 00000000  E8 00000016			call introduction
- 00000005  E8 00000094		    call getUserData
-						; call validate --- inside procedure definition below
- 0000000A  E8 00000132		    call showPrimes
-						; call isPrime --- inside procedure definition below 
- 0000000F  E8 000001BE			call farewell
+ 00000000  E8 00000016			call   introduction
+ 00000005  E8 00000094		    call   getUserData		; calls sub-procedure validate
+ 0000000A  E8 00000105		    call   showPrimes		; calls sub-procedure isPrime
+ 0000000F  E8 00000173			call   farewell
 
 					Invoke ExitProcess,0	; exit to operating system
  00000014  6A 00	   *	    push   +000000000h
@@ -282,37 +252,51 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
 
 				; (insert additional procedures here)
 
+				; ---------------------------------------------------------------------------------
+				; Name: introduction
+				;
+				; This procedure displays the various intro_prompt and  directions to the user.
+				;
+				; Preconditions: global variables intro_1 and direction_[1-7] must be initialized to BYTE strings.
+				;
+				; Postconditions: N/A
+				;
+				; Receives: Only used global variables described in Preconditions section.
+				;
+				; Returns: Only prints original global variables described above.
+				; ---------------------------------------------------------------------------------
+
  0000001B			introduction PROC
- 0000001B  BA 00000000 R		mov EDX, OFFSET intro_1
+ 0000001B  BA 00000000 R		mov  EDX, OFFSET intro_1
  00000020  E8 00000000 E		call WriteString
  00000025  E8 00000000 E		call CrLf
  0000002A  E8 00000000 E		call CrLf
 
- 0000002F  BA 00000043 R		mov EDX, OFFSET direction_1
+ 0000002F  BA 00000043 R		mov  EDX, OFFSET direction_1
  00000034  E8 00000000 E		call WriteString
  00000039  E8 00000000 E		call CrLf
 
- 0000003E  BA 0000004F R		mov EDX, OFFSET direction_2
+ 0000003E  BA 0000004F R		mov  EDX, OFFSET direction_2
  00000043  E8 00000000 E		call WriteString
  00000048  E8 00000000 E		call CrLf
 					
- 0000004D  BA 000000B0 R		mov EDX, OFFSET direction_3
+ 0000004D  BA 000000B0 R		mov  EDX, OFFSET direction_3
  00000052  E8 00000000 E		call WriteString
  00000057  E8 00000000 E		call CrLf
 
- 0000005C  BA 0000010F R		mov EDX, OFFSET direction_4
+ 0000005C  BA 0000010F R		mov  EDX, OFFSET direction_4
  00000061  E8 00000000 E		call WriteString
  00000066  E8 00000000 E		call CrLf
 
- 0000006B  BA 0000015E R		mov EDX, OFFSET direction_5
+ 0000006B  BA 0000015E R		mov  EDX, OFFSET direction_5
  00000070  E8 00000000 E		call WriteString
  00000075  E8 00000000 E		call CrLf
 
- 0000007A  BA 000001D6 R		mov EDX, OFFSET direction_6
+ 0000007A  BA 000001D6 R		mov  EDX, OFFSET direction_6
  0000007F  E8 00000000 E		call WriteString
  00000084  E8 00000000 E		call CrLf
 
- 00000089  BA 00000250 R		mov EDX, OFFSET direction_7
+ 00000089  BA 00000250 R		mov  EDX, OFFSET direction_7
  0000008E  E8 00000000 E		call WriteString
  00000093  E8 00000000 E		call CrLf
  00000098  E8 00000000 E		call CrLf
@@ -320,226 +304,234 @@ Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
  0000009D  C3				ret
  0000009E			introduction ENDP
 
+
+				; ---------------------------------------------------------------------------------
+				; Name: getUserData
+				;
+				; This procedure collects an inputted number from the user and then calls on the validate procedure 
+				; to check if that number is within the range [1...200]. The procedure repeats the prompt if the 
+				; number is not valid.
+				;
+				; Preconditions: 
+				;	-Global prompt variables must be initialized to BYTE strings.
+				;	-validate procedure must be defined and operational.
+				;
+				; Postconditions: N/A
+				;
+				; Receives: user_input_check DWORD from validate procedure.
+				;
+				; Returns: user_input DWORD saves the value from EAX at the end of the procedure.
+				; ---------------------------------------------------------------------------------
+
  0000009E			getUserData PROC
-					
- 0000009E  C7 05 000002C7 R		mov user_input_check, 0 ; 0 = not valid number..initialize to this
+ 0000009E  C7 05 000002C7 R		mov user_input_check, 0					; (0=not valid, 1=valid) --- initialize to 0
 	   00000000
-					; Prompt the user for an integer
- 000000A8				_promptUser:
- 000000A8  BA 00000280 R			mov EDX, OFFSET get_user_input_1
+					
+ 000000A8				_promptUser:						    ; Prompt the user for an integer
+ 000000A8  BA 00000280 R			mov  EDX, OFFSET get_user_input_1
  000000AD  E8 00000000 E			call WriteString
- 000000B2  E8 00000000 E			call ReadInt
-						; EAX now has the user input
-						
+ 000000B2  E8 00000000 E			call ReadInt						; EAX now has the user input
 
-					; eventually call validate
+ 000000B7  E8 0000000F			call validate							
 					
- 000000B7  E8 0000002D			call validate
-
-					; TEST --- DELETE
- 000000BC  BA 00000368 R		mov EDX, OFFSET test_backtogud
- 000000C1  E8 00000000 E		call WriteString
- 000000C6  E8 00000000 E		call CrLf
-					; ----------------------------
-					; check user_input_check and decided where to jump
- 000000CB  83 3D 000002C7 R		cmp user_input_check, 1
+ 000000BC  83 3D 000002C7 R		cmp  user_input_check, 1				; check user_input_check and decided where to jump
 	   01
- 000000D2  75 D4			JNE	_promptUser
+ 000000C3  75 E3			JNE	 _promptUser
 
+ 000000C5  A3 000002CB R		mov  user_input, EAX					; save eax in user_input
 
- 000000D4  A3 000002CB R		mov user_input, EAX ; save eax in user_input
+ 000000CA  C3				ret
+ 000000CB			getUserData ENDP
 
- 000000D9  A1 000002CB R		mov EAX, user_input ; write user_input
- 000000DE  E8 00000000 E		call WriteInt
- 000000E3  E8 00000000 E		call CrLf
+				; ---------------------------------------------------------------------------------
+				; Name: validate
+				;
+				; This procedure takes EAX value from getUserData and validates if that value is within the range of [1...200].
+				; It returns the validation to getUserData.
+				;
+				; Preconditions: 
+				;	-LOWER_BOUND constant must be set to 1
+				;	-UPPER_BOUND constant must be set to 200.
+				;	-user_input_check must be set to 0
+				;	-all prompt global variables must be initialized in the data section.
+				;
+				; Postconditions: N/A
+				;
+				; Receives: EAX, and variables/constants described in the preconditions section.
+				;
+				; Returns: user_input_check DWORD to getUserData.
+				; ---------------------------------------------------------------------------------
 
-					
+ 000000CB			validate PROC
+ 000000CB  3D 000000C8			cmp  EAX, UPPER_BOUND
+ 000000D0  7F 02			JG   _notInRange
+ 000000D2  7E 1F			JLE  _lessThanOrEqualToUpper
 
- 000000E8  C3				ret
- 000000E9			getUserData ENDP
-
- 000000E9			validate PROC
-					;TEST---DELETE----------
- 000000E9  BA 00000391 R		mov EDX, OFFSET test_validate 
- 000000EE  E8 00000000 E		call WriteString
- 000000F3  E8 00000000 E		call CrLf
-					; -----------------------------
-
- 000000F8  3D 000000C8			cmp EAX, UPPER_BOUND
- 000000FD  7F 02			JG  _notInRange
- 000000FF  7E 1F			JLE _lessThanOrEqualToUpper
-
-
- 00000101				_notInRange:
-						; Error Too High
- 00000101  BA 000002CF R			mov EDX, OFFSET error_1 ; Error Message 1
- 00000106  E8 00000000 E			call WriteString
- 0000010B  E8 00000000 E			call CrLf
+ 000000D4				_notInRange:							; Error Too High
+ 000000D4  BA 000002CF R			mov  EDX, OFFSET error_1			; Error Message 1
+ 000000D9  E8 00000000 E			call WriteString
+ 000000DE  E8 00000000 E			call CrLf
 						
- 00000110  BA 000002D6 R			mov EDX, OFFSET error_2 ; Error Message 2
- 00000115  E8 00000000 E			call WriteString
- 0000011A  E8 00000000 E			call CrLf
- 0000011F  C3					ret
+ 000000E3  BA 000002D6 R			mov  EDX, OFFSET error_2			; Error Message 2
+ 000000E8  E8 00000000 E			call WriteString
+ 000000ED  E8 00000000 E			call CrLf
+ 000000F2  C3					ret
 
+ 000000F3				_lessThanOrEqualToUpper:
+ 000000F3  83 F8 01				cmp  EAX, LOWER_BOUND
+ 000000F6  7D 02				JGE _validNumber
+ 000000F8  7C DA				JL  _notInRange
 
-
- 00000120				_lessThanOrEqualToUpper:
- 00000120  83 F8 01				cmp EAX, LOWER_BOUND
- 00000123  7D 02				JGE _validNumber
- 00000125  7C DA				JL  _notInRange
-
- 00000127				_validNumber:
-						; display success message
- 00000127  BA 00000309 R			mov EDX, OFFSET is_valid_message
- 0000012C  E8 00000000 E			call WriteString
- 00000131  E8 00000000 E			call CrLf
- 00000136  C7 05 000002C7 R			mov user_input_check, 1	; 1 = valid number
+ 000000FA				_validNumber:							; display success message
+ 000000FA  BA 00000309 R			mov  EDX, OFFSET is_valid_message
+ 000000FF  E8 00000000 E			call WriteString
+ 00000104  E8 00000000 E			call CrLf
+ 00000109  C7 05 000002C7 R			mov user_input_check, 1				; 1 = valid number
 	   00000001
 
- 00000140  C3				ret
- 00000141			validate ENDP
+ 00000113  C3				ret
+ 00000114			validate ENDP
 
- 00000141			showPrimes PROC
-					; TEST --- DELETE
- 00000141  BA 0000039A R		mov EDX, OFFSET test_sp
- 00000146  E8 00000000 E		call WriteString
- 0000014B  E8 00000000 E		call CrLf
-					; -----------------------------
+				; ---------------------------------------------------------------------------------
+				; Name: showPrimes
+				;
+				; This procedure takes the validated user_input and creates a loop with that value set to ECX.
+				; The loop uses isPrime procedure to check if the passed number is prime or not. It recieves a prime_bool value from isPrime
+				; to determine this.
+				;
+				; Preconditions: 
+				;	-isPrime procedure must be defined
+				;	-prime_bool DWORD must be initialized in the data section.
+				;	-user_input must be defined from the prior procedures.
+				;
+				; Postconditions: N/A
+				;
+				; Receives: user_input, and variables/constants described in the preconditions section.
+				;
+				; Returns: prints specified number of prime numbers to the console.
+				; ---------------------------------------------------------------------------------
 
-					; directions: display n prime numbers, 
-					; utilize counting loop and LOOP instruction to keep track of the number of primes displayed,
-					; candidate primes are generated within counting loop and are passed to isPrime procedure for evaluation...
+ 00000114			showPrimes PROC
+ 00000114  8B 0D 000002CB R		mov ECX, user_input						; loop count set to user_input
+ 0000011A  B8 00000003			mov EAX, 3								; set the first prime candidate to 3
 
- 00000150  8B 0D 000002CB R		mov ECX, user_input ; loop count set to user_input
- 00000156  B8 00000003			mov EAX, 3	; set the first prime candidate to 3
-
- 0000015B				prime_candidate_loop:
- 0000015B  E8 00000023				call isPrime
- 00000160  83 3D 0000031F R			cmp prime_bool, 1 ; 0 =  not prime --- 1 = prime
+ 0000011F				prime_candidate_loop:
+ 0000011F  E8 00000023				call isPrime
+ 00000124  83 3D 0000031F R			cmp prime_bool, 1					; 0 =  not prime --- 1 = prime
 	   01
-							; if prime...(JE) print the prime
- 00000167  74 02				JE _printPrime
- 00000169  7C 11				JL _notPrime
+ 0000012B  74 02				JE _printPrime
+ 0000012D  7C 11				JL _notPrime
 
- 0000016B					_printPrime:
- 0000016B  BA 00000323 R				mov EDX, OFFSET prime_spaces
- 00000170  E8 00000000 E				call WriteInt
- 00000175  E8 00000000 E				call WriteString	; print the necessary space
-
+ 0000012F					_printPrime:
+ 0000012F  BA 00000323 R				mov  EDX, OFFSET prime_spaces
+ 00000134  E8 00000000 E				call WriteInt
+ 00000139  E8 00000000 E				call WriteString				; print the necessary space
+							;
+							;
 							; also dont forget to print the line breaks
- 0000017A  EB 03					jmp  _endLoop
+							;
+							;
+							;
+ 0000013E  EB 03					jmp  _endLoop
 
- 0000017C					_notPrime:
- 0000017C  41						INC ECX ; increment ecx up 1 to reset the loop counter if their is no prime number
- 0000017D  EB 00					jmp _endLoop
+ 00000140					_notPrime:
+ 00000140  41						INC  ECX						; increment ecx up 1 to reset the loop counter if their is no prime number
+ 00000141  EB 00					jmp  _endLoop
 							
-						
- 0000017F					_endLoop:
- 0000017F  40						INC EAX ; increment eax to give the next prime candidate before the next loop iteration
+ 00000143					_endLoop:
+ 00000143  40						INC  EAX						; increment eax to give the next prime candidate before the next loop iteration
 
- 00000180  E2 D9				LOOP prime_candidate_loop
+ 00000144  E2 D9				LOOP prime_candidate_loop
 
+ 00000146  C3				ret
+ 00000147			showPrimes ENDP
 
-					; check for bool with cmp like I did in getUserData
-					; print if prime
+				; ---------------------------------------------------------------------------------
+				; Name: isPrime
+				;
+				; This procedure takes the EAX and ECX register values from showPrimes procedure and uses them to create
+				; an innerLoop that checks if the current iteration is a prime number. It then returns prime_bool to showPrimes.
+				;
+				; Preconditions: 
+				;	-EAX and ECX must be given from showPrimes.
+				;	-EAX and ECX must first be pushed to the stack in order to save their values for use later.
+				;
+				; Postconditions: EAX and ECX must be popped from the stack to retrieve the original values.
+				;
+				; Receives: EAX, ECX and prime_bool
+				;
+				; Returns: prime_bool (0 = not prime or 1 = prime)
+				; ---------------------------------------------------------------------------------
+
+ 00000147			isPrime PROC
+					; SAVE ON STACK ECX and EAX -------------------------------------------------------------
+ 00000147  51				push ECX								; ECX is loop count set to user_input
+ 00000148  50				push EAX								; EAX is the prime candidate, last in, first out!
+					; ---------------------------------------------------------------------------------------
 					
- 00000182  C3				ret
- 00000183			showPrimes ENDP
-
- 00000183			isPrime PROC
-
-					; TEST --- DELETE
- 00000183  BA 000003A5 R		mov EDX, OFFSET test_ip
- 00000188  E8 00000000 E		call WriteString
- 0000018D  E8 00000000 E		call CrLf
-					; -----------------------------
-					; directions:
-					; receive candidate prime value eax
-					; check if prime logic
-					; return bool (0 = not prime or 1 = prime)
-
-					; SAVE ON STACK ECX and EAX
- 00000192  51				push ECX	;ECX is loop count set to user_input
- 00000193  50				push EAX	; EAX is the prime candidate, last in, first out!
-
-					; make innerLoop count on ECX
- 00000194  8B C8			mov ECX, EAX
- 00000196  83 E9 01			sub ECX, 1	;prep ecx to be one less than the prime candidate
+ 00000149  8B C8			mov ECX, EAX							; make innerLoop count on ECX
+ 0000014B  83 E9 01			sub ECX, 1								; prep ecx to be one less than the prime candidate
 					
- 00000199				innerLoop:
-						; clear EDX for div
- 00000199  BA 00000000				mov EDX, 0
+ 0000014E				innerLoop:
+ 0000014E  BA 00000000				mov EDX, 0							; clear EDX for div
+ 00000153  F7 F1				div ECX
+ 00000155  83 FA 00				cmp EDX, 0
+ 00000158  74 02				JE  _edxIsZero
+ 0000015A  75 24				JNE _endItteration					; not prime on this iteration
 
-						; do a reverse loop, start with ecx at (prime_candidate - 1)
-						; check EDX:EAX / ECX and see if remainder(EDX) is 0
-						;	-if edx=0 check the value of ecx:
-						;		-if ecx >=2..return NOT PRIME
-						;		-if ecx = 1...return PRIME
-						; EAX / 
+ 0000015C					_edxIsZero:							;check ecx
+ 0000015C  83 F9 01					cmp ecx, 1
+ 0000015F  74 02					JE  _ecxIsOne
+ 00000161  7F 0C					jG  _ecxIsNotOne
 
- 0000019E  F7 F1				div ECX
- 000001A0  83 FA 00				cmp EDX, 0
- 000001A3  74 02				JE  _edxIsZero
- 000001A5  75 24				JNE _endItteration ; not prime on this iteration
-
- 000001A7					_edxIsZero:
-							;check ecx
- 000001A7  83 F9 01					cmp ecx, 1
- 000001AA  74 02					JE  _ecxIsOne
- 000001AC  7F 0C					jG _ecxIsNotOne
-
- 000001AE					_ecxIsOne:	
-							; this is a prime number
-							; return PRIME bool
- 000001AE  C7 05 0000031F R				mov prime_bool, 1	; return bool (0 = not prime or 1 = prime)
+ 00000163					_ecxIsOne:							; this is a prime number
+ 00000163  C7 05 0000031F R				mov prime_bool, 1				; return bool (0 = not prime or 1 = prime)
 	   00000001
- 000001B8  EB 11					jmp _endItteration
+ 0000016D  EB 11					jmp _endItteration
 
-
- 000001BA					_ecxIsNotOne:
-							; this is not a prime number
-							; return Prime bool
- 000001BA  C7 05 0000031F R				mov prime_bool, 0	; return bool (0 = not prime or 1 = prime)
+ 0000016F					_ecxIsNotOne:						; this is not a prime number
+ 0000016F  C7 05 0000031F R				mov prime_bool, 0				; return bool (0 = not prime or 1 = prime)
 	   00000000
- 000001C4  B9 00000001					mov ECX, 1	; close loop with ecx change
- 000001C9  EB 00					jmp _endItteration
-
-
+ 00000179  B9 00000001					mov ECX, 1						; close loop with ecx change
+ 0000017E  EB 00					jmp _endItteration
 							
- 000001CB					_endItteration:	; not prime on this iteration
- 000001CB  58						pop EAX		; reinitialize EAX from stack
- 000001CC  50						push EAX	; re-save EAX on the stack
+ 00000180					_endItteration:						; not prime on this iteration
+ 00000180  58						pop EAX							; reinitialize EAX from stack
+ 00000181  50						push EAX						; re-save EAX on the stack
 
+ 00000182  E2 CA			LOOP innerLoop
 
- 000001CD  E2 CA			LOOP innerLoop
-					
+ 00000184  58				pop EAX									; BRING BACK ORIGINAL EXC and EAX from Stack
+ 00000185  59				pop ECX
 
-					;
+ 00000186  C3				ret
+ 00000187			isPrime ENDP
 
+				; ---------------------------------------------------------------------------------
+				; Name: farewell
+				;
+				; This procedure prints a farewell prompt to the user.
+				;
+				; Preconditions: farewell_prompt must be defined in the data section.
+				;
+				; Postconditions: N/A
+				;
+				; Receives: farewell_prompt
+				;
+				; Returns: WriteString farewell_prompt
+				; ---------------------------------------------------------------------------------
 
+ 00000187			farewell PROC
+ 00000187  E8 00000000 E		call CrLf
+ 0000018C  BA 00000327 R		mov  EDX, OFFSET farewell_prompt
+ 00000191  E8 00000000 E		call WriteString
+ 00000196  E8 00000000 E		call CrLf
 
-
-
-
-					; BRING BACK EXC and EAX from Stack
- 000001CF  58				pop EAX
- 000001D0  59				pop ECX
-
-
-
- 000001D1  C3				ret
- 000001D2			isPrime ENDP
-
- 000001D2			farewell PROC
- 000001D2  BA 00000327 R		mov EDX, OFFSET farewell_prompt
- 000001D7  E8 00000000 E		call WriteString
- 000001DC  E8 00000000 E		call CrLf
-
- 000001E1  C3				ret
- 000001E2			farewell ENDP
+ 0000019B  C3				ret
+ 0000019C			farewell ENDP
 
 				END main
-Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 21:54:35
+Microsoft (R) Macro Assembler Version 14.29.30139.0	    07/24/22 23:14:19
 "Project Four     (Proj4_maesz.asm			     Symbols 2 - 1
 
 
@@ -633,8 +625,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 000003AD Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 000001E2 Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000035C Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000019C Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -741,28 +733,28 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-farewell . . . . . . . . . . . .	P Near	 000001D2 _TEXT	Length= 00000010 Public STDCALL
-getUserData  . . . . . . . . . .	P Near	 0000009E _TEXT	Length= 0000004B Public STDCALL
+farewell . . . . . . . . . . . .	P Near	 00000187 _TEXT	Length= 00000015 Public STDCALL
+getUserData  . . . . . . . . . .	P Near	 0000009E _TEXT	Length= 0000002D Public STDCALL
   _promptUser  . . . . . . . . .	L Near	 000000A8 _TEXT	
 introduction . . . . . . . . . .	P Near	 0000001B _TEXT	Length= 00000083 Public STDCALL
-isPrime  . . . . . . . . . . . .	P Near	 00000183 _TEXT	Length= 0000004F Public STDCALL
-  innerLoop  . . . . . . . . . .	L Near	 00000199 _TEXT	
-  _edxIsZero . . . . . . . . . .	L Near	 000001A7 _TEXT	
-  _ecxIsOne  . . . . . . . . . .	L Near	 000001AE _TEXT	
-  _ecxIsNotOne . . . . . . . . .	L Near	 000001BA _TEXT	
-  _endItteration . . . . . . . .	L Near	 000001CB _TEXT	
+isPrime  . . . . . . . . . . . .	P Near	 00000147 _TEXT	Length= 00000040 Public STDCALL
+  innerLoop  . . . . . . . . . .	L Near	 0000014E _TEXT	
+  _edxIsZero . . . . . . . . . .	L Near	 0000015C _TEXT	
+  _ecxIsOne  . . . . . . . . . .	L Near	 00000163 _TEXT	
+  _ecxIsNotOne . . . . . . . . .	L Near	 0000016F _TEXT	
+  _endItteration . . . . . . . .	L Near	 00000180 _TEXT	
 main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001B Public STDCALL
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
-showPrimes . . . . . . . . . . .	P Near	 00000141 _TEXT	Length= 00000042 Public STDCALL
-  prime_candidate_loop . . . . .	L Near	 0000015B _TEXT	
-  _printPrime  . . . . . . . . .	L Near	 0000016B _TEXT	
-  _notPrime  . . . . . . . . . .	L Near	 0000017C _TEXT	
-  _endLoop . . . . . . . . . . .	L Near	 0000017F _TEXT	
-validate . . . . . . . . . . . .	P Near	 000000E9 _TEXT	Length= 00000058 Public STDCALL
-  _notInRange  . . . . . . . . .	L Near	 00000101 _TEXT	
-  _lessThanOrEqualToUpper  . . .	L Near	 00000120 _TEXT	
-  _validNumber . . . . . . . . .	L Near	 00000127 _TEXT	
+showPrimes . . . . . . . . . . .	P Near	 00000114 _TEXT	Length= 00000033 Public STDCALL
+  prime_candidate_loop . . . . .	L Near	 0000011F _TEXT	
+  _printPrime  . . . . . . . . .	L Near	 0000012F _TEXT	
+  _notPrime  . . . . . . . . . .	L Near	 00000140 _TEXT	
+  _endLoop . . . . . . . . . . .	L Near	 00000143 _TEXT	
+validate . . . . . . . . . . . .	P Near	 000000CB _TEXT	Length= 00000049 Public STDCALL
+  _notInRange  . . . . . . . . .	L Near	 000000D4 _TEXT	
+  _lessThanOrEqualToUpper  . . .	L Near	 000000F3 _TEXT	
+  _validNumber . . . . . . . . .	L Near	 000000FA _TEXT	
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 
 
@@ -1011,11 +1003,6 @@ magenta  . . . . . . . . . . . .	Number	 00000005h
 prime_bool . . . . . . . . . . .	DWord	 0000031F _DATA	
 prime_spaces . . . . . . . . . .	Byte	 00000323 _DATA	
 red  . . . . . . . . . . . . . .	Number	 00000004h   
-test_backtogud . . . . . . . . .	Byte	 00000368 _DATA	
-test_gud . . . . . . . . . . . .	Byte	 0000035C _DATA	
-test_ip  . . . . . . . . . . . .	Byte	 000003A5 _DATA	
-test_sp  . . . . . . . . . . . .	Byte	 0000039A _DATA	
-test_validate  . . . . . . . . .	Byte	 00000391 _DATA	
 user_input_check . . . . . . . .	DWord	 000002C7 _DATA	
 user_input . . . . . . . . . . .	DWord	 000002CB _DATA	
 white  . . . . . . . . . . . . .	Number	 0000000Fh   

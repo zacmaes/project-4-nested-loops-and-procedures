@@ -55,52 +55,63 @@ farewell_prompt  BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 
 .code
 main PROC
+	; (insert executable instructions here)
 
-; (insert executable instructions here)
-
-	call introduction
-    call getUserData
-		; call validate --- inside procedure definition below
-    call showPrimes
-		; call isPrime --- inside procedure definition below 
-	call farewell
+	call   introduction
+    call   getUserData		; calls sub-procedure validate
+    call   showPrimes		; calls sub-procedure isPrime
+	call   farewell
 
 	Invoke ExitProcess,0	; exit to operating system
 main ENDP
 
 ; (insert additional procedures here)
 
+; ---------------------------------------------------------------------------------
+; Name: introduction
+;
+; This procedure displays the various intro_prompt and  directions to the user.
+;
+; Preconditions: global variables intro_1 and direction_[1-7] must be initialized to BYTE strings.
+;
+; Postconditions: N/A
+;
+; Receives: Only used global variables described in Preconditions section.
+;
+; Returns: Only prints original global variables described above.
+; ---------------------------------------------------------------------------------
+
 introduction PROC
-	mov EDX, OFFSET intro_1
+	mov  EDX, OFFSET intro_1
 	call WriteString
 	call CrLf
 	call CrLf
 
-	mov EDX, OFFSET direction_1
+	mov  EDX, OFFSET direction_1
 	call WriteString
 	call CrLf
 
-	mov EDX, OFFSET direction_2
+	mov  EDX, OFFSET direction_2
 	call WriteString
 	call CrLf
 	
-	mov EDX, OFFSET direction_3
+	mov  EDX, OFFSET direction_3
 	call WriteString
 	call CrLf
 
-	mov EDX, OFFSET direction_4
+	mov  EDX, OFFSET direction_4
 	call WriteString
 	call CrLf
 
-	mov EDX, OFFSET direction_5
+	mov  EDX, OFFSET direction_5
 	call WriteString
 	call CrLf
 
-	mov EDX, OFFSET direction_6
+	mov  EDX, OFFSET direction_6
 	call WriteString
 	call CrLf
 
-	mov EDX, OFFSET direction_7
+	mov  EDX, OFFSET direction_7
 	call WriteString
 	call CrLf
 	call CrLf
@@ -108,212 +119,220 @@ introduction PROC
 	ret
 introduction ENDP
 
+
+; ---------------------------------------------------------------------------------
+; Name: getUserData
+;
+; This procedure collects an inputted number from the user and then calls on the validate procedure 
+; to check if that number is within the range [1...200]. The procedure repeats the prompt if the 
+; number is not valid.
+;
+; Preconditions: 
+;	-Global prompt variables must be initialized to BYTE strings.
+;	-validate procedure must be defined and operational.
+;
+; Postconditions: N/A
+;
+; Receives: user_input_check DWORD from validate procedure.
+;
+; Returns: user_input DWORD saves the value from EAX at the end of the procedure.
+; ---------------------------------------------------------------------------------
+
 getUserData PROC
+	mov user_input_check, 0					; (0=not valid, 1=valid) --- initialize to 0
 	
-	mov user_input_check, 0 ; 0 = not valid number..initialize to this
-	; Prompt the user for an integer
-	_promptUser:
-		mov EDX, OFFSET get_user_input_1
+	_promptUser:						    ; Prompt the user for an integer
+		mov  EDX, OFFSET get_user_input_1
 		call WriteString
-		call ReadInt
-		; EAX now has the user input
-		
+		call ReadInt						; EAX now has the user input
 
-	; eventually call validate
+	call validate							
 	
-	call validate
+	cmp  user_input_check, 1				; check user_input_check and decided where to jump
+	JNE	 _promptUser
 
-	; TEST --- DELETE
-	mov EDX, OFFSET test_backtogud
-	call WriteString
-	call CrLf
-	; ----------------------------
-	; check user_input_check and decided where to jump
-	cmp user_input_check, 1
-	JNE	_promptUser
-
-
-	mov user_input, EAX ; save eax in user_input
-
-	mov EAX, user_input ; write user_input
-	call WriteInt
-	call CrLf
-
-	
+	mov  user_input, EAX					; save eax in user_input
 
 	ret
 getUserData ENDP
 
+; ---------------------------------------------------------------------------------
+; Name: validate
+;
+; This procedure takes EAX value from getUserData and validates if that value is within the range of [1...200].
+; It returns the validation to getUserData.
+;
+; Preconditions: 
+;	-LOWER_BOUND constant must be set to 1
+;	-UPPER_BOUND constant must be set to 200.
+;	-user_input_check must be set to 0
+;	-all prompt global variables must be initialized in the data section.
+;
+; Postconditions: N/A
+;
+; Receives: EAX, and variables/constants described in the preconditions section.
+;
+; Returns: user_input_check DWORD to getUserData.
+; ---------------------------------------------------------------------------------
+
 validate PROC
-	;TEST---DELETE----------
-	mov EDX, OFFSET test_validate 
-	call WriteString
-	call CrLf
-	; -----------------------------
+	cmp  EAX, UPPER_BOUND
+	JG   _notInRange
+	JLE  _lessThanOrEqualToUpper
 
-	cmp EAX, UPPER_BOUND
-	JG  _notInRange
-	JLE _lessThanOrEqualToUpper
-
-
-	_notInRange:
-		; Error Too High
-		mov EDX, OFFSET error_1 ; Error Message 1
+	_notInRange:							; Error Too High
+		mov  EDX, OFFSET error_1			; Error Message 1
 		call WriteString
 		call CrLf
 		
-		mov EDX, OFFSET error_2 ; Error Message 2
+		mov  EDX, OFFSET error_2			; Error Message 2
 		call WriteString
 		call CrLf
 		ret
 
-
-
 	_lessThanOrEqualToUpper:
-		cmp EAX, LOWER_BOUND
+		cmp  EAX, LOWER_BOUND
 		JGE _validNumber
 		JL  _notInRange
 
-	_validNumber:
-		; display success message
-		mov EDX, OFFSET is_valid_message
+	_validNumber:							; display success message
+		mov  EDX, OFFSET is_valid_message
 		call WriteString
 		call CrLf
-		mov user_input_check, 1	; 1 = valid number
+		mov user_input_check, 1				; 1 = valid number
 
 	ret
 validate ENDP
 
+; ---------------------------------------------------------------------------------
+; Name: showPrimes
+;
+; This procedure takes the validated user_input and creates a loop with that value set to ECX.
+; The loop uses isPrime procedure to check if the passed number is prime or not. It recieves a prime_bool value from isPrime
+; to determine this.
+;
+; Preconditions: 
+;	-isPrime procedure must be defined
+;	-prime_bool DWORD must be initialized in the data section.
+;	-user_input must be defined from the prior procedures.
+;
+; Postconditions: N/A
+;
+; Receives: user_input, and variables/constants described in the preconditions section.
+;
+; Returns: prints specified number of prime numbers to the console.
+; ---------------------------------------------------------------------------------
+
 showPrimes PROC
-	; TEST --- DELETE
-	mov EDX, OFFSET test_sp
-	call WriteString
-	call CrLf
-	; -----------------------------
-
-	; directions: display n prime numbers, 
-	; utilize counting loop and LOOP instruction to keep track of the number of primes displayed,
-	; candidate primes are generated within counting loop and are passed to isPrime procedure for evaluation...
-
-	mov ECX, user_input ; loop count set to user_input
-	mov EAX, 3	; set the first prime candidate to 3
+	mov ECX, user_input						; loop count set to user_input
+	mov EAX, 3								; set the first prime candidate to 3
 
 	prime_candidate_loop:
 		call isPrime
-		cmp prime_bool, 1 ; 0 =  not prime --- 1 = prime
-			; if prime...(JE) print the prime
+		cmp prime_bool, 1					; 0 =  not prime --- 1 = prime
 		JE _printPrime
 		JL _notPrime
 
 		_printPrime:
-			mov EDX, OFFSET prime_spaces
+			mov  EDX, OFFSET prime_spaces
 			call WriteInt
-			call WriteString	; print the necessary space
-
+			call WriteString				; print the necessary space
+			;
+			;
 			; also dont forget to print the line breaks
+			;
+			;
+			;
 			jmp  _endLoop
 
 		_notPrime:
-			INC ECX ; increment ecx up 1 to reset the loop counter if their is no prime number
-			jmp _endLoop
+			INC  ECX						; increment ecx up 1 to reset the loop counter if their is no prime number
+			jmp  _endLoop
 			
-		
 		_endLoop:
-			INC EAX ; increment eax to give the next prime candidate before the next loop iteration
+			INC  EAX						; increment eax to give the next prime candidate before the next loop iteration
 
 		LOOP prime_candidate_loop
 
-
-	; check for bool with cmp like I did in getUserData
-	; print if prime
-	
 	ret
 showPrimes ENDP
 
+; ---------------------------------------------------------------------------------
+; Name: isPrime
+;
+; This procedure takes the EAX and ECX register values from showPrimes procedure and uses them to create
+; an innerLoop that checks if the current iteration is a prime number. It then returns prime_bool to showPrimes.
+;
+; Preconditions: 
+;	-EAX and ECX must be given from showPrimes.
+;	-EAX and ECX must first be pushed to the stack in order to save their values for use later.
+;
+; Postconditions: EAX and ECX must be popped from the stack to retrieve the original values.
+;
+; Receives: EAX, ECX and prime_bool
+;
+; Returns: prime_bool (0 = not prime or 1 = prime)
+; ---------------------------------------------------------------------------------
+
 isPrime PROC
-
-	; TEST --- DELETE
-	mov EDX, OFFSET test_ip
-	call WriteString
-	call CrLf
-	; -----------------------------
-	; directions:
-	; receive candidate prime value eax
-	; check if prime logic
-	; return bool (0 = not prime or 1 = prime)
-
-	; SAVE ON STACK ECX and EAX
-	push ECX	;ECX is loop count set to user_input
-	push EAX	; EAX is the prime candidate, last in, first out!
-
-	; make innerLoop count on ECX
-	mov ECX, EAX
-	sub ECX, 1	;prep ecx to be one less than the prime candidate
+	; SAVE ON STACK ECX and EAX -------------------------------------------------------------
+	push ECX								; ECX is loop count set to user_input
+	push EAX								; EAX is the prime candidate, last in, first out!
+	; ---------------------------------------------------------------------------------------
+	
+	mov ECX, EAX							; make innerLoop count on ECX
+	sub ECX, 1								; prep ecx to be one less than the prime candidate
 	
 	innerLoop:
-		; clear EDX for div
-		mov EDX, 0
-
-		; do a reverse loop, start with ecx at (prime_candidate - 1)
-		; check EDX:EAX / ECX and see if remainder(EDX) is 0
-		;	-if edx=0 check the value of ecx:
-		;		-if ecx >=2..return NOT PRIME
-		;		-if ecx = 1...return PRIME
-		; EAX / 
-
+		mov EDX, 0							; clear EDX for div
 		div ECX
 		cmp EDX, 0
 		JE  _edxIsZero
-		JNE _endItteration ; not prime on this iteration
+		JNE _endItteration					; not prime on this iteration
 
-		_edxIsZero:
-			;check ecx
+		_edxIsZero:							;check ecx
 			cmp ecx, 1
 			JE  _ecxIsOne
-			jG _ecxIsNotOne
+			jG  _ecxIsNotOne
 
-		_ecxIsOne:	
-			; this is a prime number
-			; return PRIME bool
-			mov prime_bool, 1	; return bool (0 = not prime or 1 = prime)
+		_ecxIsOne:							; this is a prime number
+			mov prime_bool, 1				; return bool (0 = not prime or 1 = prime)
 			jmp _endItteration
 
-
-		_ecxIsNotOne:
-			; this is not a prime number
-			; return Prime bool
-			mov prime_bool, 0	; return bool (0 = not prime or 1 = prime)
-			mov ECX, 1	; close loop with ecx change
+		_ecxIsNotOne:						; this is not a prime number
+			mov prime_bool, 0				; return bool (0 = not prime or 1 = prime)
+			mov ECX, 1						; close loop with ecx change
 			jmp _endItteration
-
-
 			
-		_endItteration:	; not prime on this iteration
-			pop EAX		; reinitialize EAX from stack
-			push EAX	; re-save EAX on the stack
-
+		_endItteration:						; not prime on this iteration
+			pop EAX							; reinitialize EAX from stack
+			push EAX						; re-save EAX on the stack
 
 	LOOP innerLoop
-	
 
-	;
-
-
-
-
-
-
-	; BRING BACK EXC and EAX from Stack
-	pop EAX
+	pop EAX									; BRING BACK ORIGINAL EXC and EAX from Stack
 	pop ECX
-
-
 
 	ret
 isPrime ENDP
 
+; ---------------------------------------------------------------------------------
+; Name: farewell
+;
+; This procedure prints a farewell prompt to the user.
+;
+; Preconditions: farewell_prompt must be defined in the data section.
+;
+; Postconditions: N/A
+;
+; Receives: farewell_prompt
+;
+; Returns: WriteString farewell_prompt
+; ---------------------------------------------------------------------------------
+
 farewell PROC
-	mov EDX, OFFSET farewell_prompt
+	call CrLf
+	mov  EDX, OFFSET farewell_prompt
 	call WriteString
 	call CrLf
 

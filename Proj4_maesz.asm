@@ -49,6 +49,7 @@ is_valid_message BYTE	"Your Number is valid!",0
 ; Prime Loop DATA
 prime_bool		 DWORD	?		; 0 =  not prime --- 1 = prime
 prime_spaces	 BYTE	"   ",0	; 3 spaces
+line_count		 DWORD  ?		; counts the amount of primes per line
 
 ; FAREWELL DATA
 farewell_prompt  BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
@@ -226,23 +227,34 @@ validate ENDP
 showPrimes PROC
 	mov ECX, user_input						; loop count set to user_input
 	mov EAX, 3								; set the first prime candidate to 3
+	mov line_count, 1						; initialize line_count to 1 for first iteration
 
 	prime_candidate_loop:
 		call isPrime
-		cmp prime_bool, 1					; 0 =  not prime --- 1 = prime
-		JE _printPrime
-		JL _notPrime
+		cmp  prime_bool, 1					; 0 =  not prime --- 1 = prime
+		JE	 _checkLineCount				; used to be... _printPrime
+		JL   _notPrime
 
-		_printPrime:
+		_checkLineCount:
+			cmp  line_count, 10
+			JE   _isTen
+			JNE  _notTen
+
+		_notTen:							; variable line_count
 			mov  EDX, OFFSET prime_spaces
 			call WriteInt
 			call WriteString				; print the necessary space
-			;
-			;
-			; also dont forget to print the line breaks
-			;
-			;
-			;
+			INC  line_count
+			
+			jmp  _endLoop
+
+		_isTen:
+			mov  EDX, OFFSET prime_spaces
+			call WriteInt
+			call WriteString				; print the necessary space
+			call CrLf
+			mov  line_count, 1
+			
 			jmp  _endLoop
 
 		_notPrime:

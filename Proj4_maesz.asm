@@ -51,6 +51,9 @@ error_1 BYTE	"ERROR!",0
 error_2 BYTE	"You entered an invalid number. Please Try Again...",0
 is_valid_message BYTE	"Your Number is valid!",0
 
+; Prime Loop DATA
+prime_bool	DWORD ?	; 0 =  not prime --- 1 = prime
+
 ; FAREWELL DATA
 farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
 
@@ -194,22 +197,115 @@ validate PROC
 validate ENDP
 
 showPrimes PROC
-	
+	; TEST --- DELETE
 	mov EDX, OFFSET test_sp
 	call WriteString
 	call CrLf
+	; -----------------------------
 
-	; eventually call isPrime
-	call isPrime
+	; directions: display n prime numbers, 
+	; utilize counting loop and LOOP instruction to keep track of the number of primes displayed,
+	; candidate primes are generated within counting loop and are passed to isPrime procedure for evaluation...
+
+	mov ECX, user_input ; loop count set to user_input
+	mov EAX, 3	; set the first prime candidate to 3
+
+	prime_candidate_loop:
+		call isPrime
+		cmp prime_bool, 1 ; 0 =  not prime --- 1 = prime
+			; if prime...(JE) print the prime
+		JE _printPrime
+		JL _notPrime
+
+		_printPrime:
+			call WriteInt
+			; also dont forget to print the necessary space and line breaks
+			jmp  _endLoop
+
+		_notPrime:
+			INC ECX ; increment exc up 1 to reset the loop counter if their is no prime number
+			jmp _endLoop
+			
+		
+		_endLoop:
+			INC EAX ; increment eax to give the next prime candidate before the next loop iteration
+
+		LOOP prime_candidate_loop
+
+
+	; check for bool with cmp like I did in getUserData
+	; print if prime
 	
 	ret
 showPrimes ENDP
 
 isPrime PROC
-	
+
+	; TEST --- DELETE
 	mov EDX, OFFSET test_ip
 	call WriteString
 	call CrLf
+	; -----------------------------
+	; directions:
+	; receive candidate prime value eax
+	; check if prime logic
+	; return bool (0 = not prime or 1 = prime)
+
+	; SAVE ON STACK ECX and EAX
+	push ECX	;ECX is loop count set to user_input
+	push EAX	; EAX is the prime candidate, last in, first out!
+
+	; make innerLoop count on ECX
+	mov ECX, EAX
+	sub ECX, 1	;prep ecx to be one less than the prime candidate
+	
+	innerLoop:
+		; clear EDX for div
+		mov EDX, 0
+
+		; do a reverse loop, start with ecx at (prime_candidate - 1)
+		; check EDX:EAX / ECX and see if remainder(EDX) is 0
+		;	-if edx=0 check the value of ecx:
+		;		-if ecx >=2..return NOT PRIME
+		;		-if ecx = 1...return PRIME
+		; EAX / 
+
+		div ECX
+		cmp EDX, 0
+		JE  _edxIsZero
+		JNE _edxIsNotZero
+
+		_edxIsZero:
+			;check ecx
+			cmp ecx, 1
+			JE  _ecxIsOne
+			jG _ecxIsNotOne
+
+		_ecxIsOne:
+			; this is a prime number
+
+		_ecxIsNotOne:
+			; this is not a prime number
+
+		_edxIsNotZero:
+			; 
+
+
+	LOOP innerLoop
+	
+
+	;
+
+
+
+
+
+
+	; BRING BACK EXC and EAX from Stack
+	pop EAX
+	pop ECX
+
+
 
 	ret
 isPrime ENDP

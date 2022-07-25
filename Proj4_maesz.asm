@@ -53,6 +53,7 @@ is_valid_message BYTE	"Your Number is valid!",0
 
 ; Prime Loop DATA
 prime_bool	DWORD ?	; 0 =  not prime --- 1 = prime
+prime_spaces BYTE "   ",0	; 3 spaces
 
 ; FAREWELL DATA
 farewell_prompt BYTE	"WOW... Look at those prime numbers! Have a nice day!",0
@@ -218,12 +219,15 @@ showPrimes PROC
 		JL _notPrime
 
 		_printPrime:
+			mov EDX, OFFSET prime_spaces
 			call WriteInt
-			; also dont forget to print the necessary space and line breaks
+			call WriteString	; print the necessary space
+
+			; also dont forget to print the line breaks
 			jmp  _endLoop
 
 		_notPrime:
-			INC ECX ; increment exc up 1 to reset the loop counter if their is no prime number
+			INC ECX ; increment ecx up 1 to reset the loop counter if their is no prime number
 			jmp _endLoop
 			
 		
@@ -273,7 +277,7 @@ isPrime PROC
 		div ECX
 		cmp EDX, 0
 		JE  _edxIsZero
-		JNE _edxIsNotZero
+		JNE _endItteration ; not prime on this iteration
 
 		_edxIsZero:
 			;check ecx
@@ -281,14 +285,25 @@ isPrime PROC
 			JE  _ecxIsOne
 			jG _ecxIsNotOne
 
-		_ecxIsOne:
+		_ecxIsOne:	
 			; this is a prime number
+			; return PRIME bool
+			mov prime_bool, 1	; return bool (0 = not prime or 1 = prime)
+			jmp _endItteration
+
 
 		_ecxIsNotOne:
 			; this is not a prime number
+			; return Prime bool
+			mov prime_bool, 0	; return bool (0 = not prime or 1 = prime)
+			mov ECX, 1	; close loop with ecx change
+			jmp _endItteration
 
-		_edxIsNotZero:
-			; 
+
+			
+		_endItteration:	; not prime on this iteration
+			pop EAX		; reinitialize EAX from stack
+			push EAX	; re-save EAX on the stack
 
 
 	LOOP innerLoop
